@@ -1,0 +1,32 @@
+{
+ "name": "ร้านจดหมายใต้โคมไฟ",
+ "short_name": "ร้านจดหมาย",
+ "description": "เกมฮีลใจ เขียนจดหมายที่ร้านใต้โคมไฟ",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#171b33",
+ "theme_color": "#171b33",
+ "lang": "th",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}
