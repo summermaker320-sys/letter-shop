@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ร้านจดหมายใต้โคมไฟ</title>
-<meta name="theme-color" content="#171b33">
+<meta name="theme-color" content="#0e1124">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ร้านจดหมาย">
@@ -55,10 +55,10 @@ textarea{width:100%;box-sizing:border-box;min-height:170px;font:inherit;line-hei
 .rain{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
 .rainwin{position:absolute;left:80.6%;top:27.8%;width:37.8%;height:21.1%;border-radius:50%;overflow:hidden;pointer-events:none}
 .fr img.bg2,.fr img.bg3,.fr img.bg4,.fr img.bg5,.fr img.bg6,.fr img.bg7,.fr img.bg8,.fr img.bg9{position:absolute;left:0;top:0;opacity:0;transition:opacity .7s;pointer-events:none}#front.wet img.bg2,#front.sum img.bg3,#front.wint:not(.wintm) img.bg4,#front.wintm img.bg7,#front.wetm img.bg9,#front.morn img.bg6{opacity:1}#front.wint #sweep{display:block!important}#front.mg #sweep{pointer-events:auto!important;touch-action:none}
-#rainbtn{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));right:12px;z-index:15;margin:0;padding:6px 12px;font-size:14px;background:rgba(23,27,51,.85);color:#f1eee6;border:1px solid #3a4170}
+#rainbtn{display:none;position:fixed;top:calc(10px + env(safe-area-inset-top,0px));right:12px;z-index:15;margin:0;padding:6px 12px;font-size:14px;background:rgba(23,27,51,.85);color:#f1eee6;border:1px solid #3a4170}
 .flash{position:absolute;inset:0;background:#dfe8ff;opacity:0;pointer-events:none}
 .bolt{position:absolute;inset:0;width:100%;height:100%;opacity:0;filter:drop-shadow(0 0 5px #bcd4ff);pointer-events:none}
-#sndbtn{top:calc(52px + env(safe-area-inset-top,0px))}
+#sndbtn{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));right:12px;z-index:15;margin:0;padding:6px 12px;font-size:14px;background:rgba(23,27,51,.85);color:#f1eee6;border:1px solid #3a4170}
 .npc{position:absolute;left:47%;bottom:1.5%;width:44%;line-height:0;pointer-events:none}
 .npc img{width:100%;height:auto;display:block;transform-origin:50% 100%;animation:breathe 3.2s ease-in-out infinite}
 @keyframes breathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.012)}}
@@ -81,6 +81,8 @@ textarea{width:100%;box-sizing:border-box;min-height:170px;font:inherit;line-hei
 #scene .hs{border-radius:6px}
 #sh-b{white-space:pre-wrap;max-height:40vh;overflow:auto}
 @media (prefers-reduced-motion:reduce){.glow,.win img{animation:none}}
+#front{position:fixed;inset:0;overflow:hidden;background:#0e1124;z-index:1}
+#front .fr{position:absolute;left:50%;top:50%;width:max(100vw,calc(100vh * 768 / 1376));width:max(100vw,calc(100dvh * 768 / 1376));aspect-ratio:768/1376;transform:translate(-50%,-50%);border-radius:0}
 </style>
 </head>
 <body>
@@ -459,6 +461,18 @@ mgCv.addEventListener("pointermove",function(e){
 });
 ["pointerup","pointercancel"].forEach(function(ev){mgCv.addEventListener(ev,function(){mgDown=false})});
 setInterval(function(){if(LS&&(season===3||season===5)&&!mgDown&&!document.hidden){lfDraw();lfUi()}},30000);
+var WK="world-v1",W=null,SS=["rain","sum","wint"];
+function wNew(old){var o=SS.filter(function(x){return x!==old});W={s:o[Math.floor(Math.random()*o.length)],end:Date.now()+(30+Math.random()*60)*60000};try{localStorage.setItem(WK,JSON.stringify(W))}catch(e){}}
+function wRoll(){var m=Math.random()<.4;if(W.s==="rain")return m?6:(Math.random()<.7?1:0);if(W.s==="sum")return m?4:2;return m?5:3}
+function wTick(){
+  if(Date.now()>W.end)wNew(W.s);
+  var n=wRoll(),k=0;while(n===season&&k++<8)n=wRoll();
+  season=n;rainUi();setTimeout(wTick,(2+Math.random()*3)*60000);
+}
+try{W=JSON.parse(localStorage.getItem(WK))}catch(e){W=null}
+if(!W||!W.s||Date.now()>W.end)wNew(W&&W.s);
+if(location.hash==="#debug")document.getElementById("rainbtn").style.display="block";
+wTick();
 document.querySelector("#wg img").src=document.querySelector("#seat img").src;
 render();
 </script>
